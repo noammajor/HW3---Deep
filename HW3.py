@@ -76,31 +76,6 @@ def plot_and_save_results(train_losses, val_losses, train_accs, val_accs, model_
     #plt.show()
     plt.close()
 
-#%% save the number of parameters
-def save_parameter_report(model, filename="file_name"):
-    file = f"{filename}_Parameter_Report.txt"
-    with open(file, 'w') as f:
-        f.write("="*60 + "\n")
-        f.write(f"DETAILED PARAMETER REPORT\n")
-        f.write("="*60 + "\n")
-        total_params = 0
-        for name, param in model.named_parameters():
-            if not param.requires_grad: continue
-            num_params = param.numel()
-            shape = list(param.shape)
-            f.write(f"Layer: {name}\n")
-            f.write(f"  Shape: {shape}\n")
-            
-            if len(shape) == 4: type_str, calc_str = "Conv2d Weights", f"{shape[0]}*{shape[1]}*{shape[2]}*{shape[3]}"
-            elif len(shape) == 2: type_str, calc_str = "Linear Weights", f"{shape[0]}*{shape[1]}"
-            elif len(shape) == 1: type_str, calc_str = "Bias / BatchNorm", f"{shape[0]}"
-            else: type_str, calc_str = "Other", str(shape)
-
-            f.write(f"  Type:  {type_str}\n")
-            f.write(f"  Calc:  {calc_str} = {num_params:,}\n")
-            f.write("-" * 60 + "\n")
-            total_params += num_params
-        f.write(f"TOTAL LEARNABLE PARAMETERS: {total_params:,}\n")
 #%% training and testing
 def train(model, train_loader, val_loader, criterion, optimizer, Epochs, test_loader, model_name="Model"):
     train_losses, val_losses = [], []
@@ -267,7 +242,6 @@ for lr_val, opt_name, batch_size, reg, layer_size in configs:
     Epochs = 10
     file_name = f"FCNN_LR{lr_val}_Opt{opt_name}_BS{batch_size}_Reg{reg}_LS{layer_size}_amountlayers3"
     test_acc, t_losses, v_losses, t_accs, v_accs = train(model, train_loader, val_loader, criterion, optimizer, Epochs, test_loader, model_name=file_name)
-    save_parameter_report(model, filename=file_name)
     all_results.append({
         'name': file_name,
         'acc': test_acc,
@@ -318,7 +292,6 @@ for lr_val, opt_name, batch_size, reg, layer_size in configs:
     Epochs = 10
     file_name = f"FCNN_LR{lr_val}_Opt{opt_name}_BS{batch_size}_Reg{reg}_LS{layer_size}_amountlayers4"
     test_acc, t_losses, v_losses, t_accs, v_accs = train(model, train_loader, val_loader, criterion, optimizer, Epochs, test_loader, model_name=file_name)
-    save_parameter_report(model, filename=file_name)
     all_results.append({
         'name': file_name,
         'acc': test_acc,
@@ -371,7 +344,6 @@ for lr_val, opt_name, batch_size, reg, layer_size in configs:
     Epochs = 10
     file_name = f"CNN_LR{lr_val}_Opt{opt_name}_BS{batch_size}_Reg{reg}_LS{layer_size}"
     test_acc, t_losses, v_losses, t_accs, v_accs =train(model, train_loader, val_loader, criterion, optimizer, Epochs, test_loader, model_name=file_name)
-    save_parameter_report(model, filename=file_name)
     all_results.append({
         'name': file_name,
         'acc': test_acc,
@@ -413,7 +385,6 @@ for lr_val, opt_name, batch_size, reg, layer_size in configs:
     Epochs = 10
     file_name = f"MobileNetV2_LR{lr_val}_Opt{opt_name}_BS{batch_size}_Reg{reg}_LS{layer_size}"
     test_acc, t_losses, v_losses, t_accs, v_accs =train(model, train_loader, val_loader, criterion, optimizer, Epochs, test_loader, model_name=file_name)
-    save_parameter_report(model, filename=file_name)
     all_results.append({
         'name': file_name,
         'acc': test_acc,
@@ -458,7 +429,6 @@ for lr_val, opt_name, batch_size, reg, layer_size in configs:
     Epochs = 10
     file_name = f"MobileNetV2_FT_LR{lr_val}_Opt{opt_name}_BS{batch_size}_Reg{reg}_LS{layer_size}"
     test_acc, t_losses, v_losses, t_accs, v_accs =train(model, train_loader, val_loader, criterion, optimizer, Epochs, test_loader, model_name=file_name)
-    save_parameter_report(model, filename=file_name)
     all_results.append({
         'name': file_name,
         'acc': test_acc,
