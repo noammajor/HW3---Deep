@@ -137,28 +137,21 @@ def getTop3Worst3(all_results):
     sorted_results = sorted(all_results, key=lambda x: x['acc'], reverse=True)
     top_3_models = sorted_results[:3]
     worst_3_models = sorted_results[-3:]
-    # 1. Process Top 3
-    print("--- TOP 3 MODELS ---")
+    #top3
     for i, res in enumerate(top_3_models):
         plot_and_save_results(
             res['train_losses'], res['val_losses'],
             res['train_accs'], res['val_accs'],
             model_name=f"TOP_{i+1}_{res['name']}"
         )
-
-    # 2. Process Worst 3
-    print("\n--- WORST 3 MODELS ---")
+    #lower3
     for i, res in enumerate(worst_3_models):
-        # Calculate rank for printing
         rank = len(sorted_results) - 2 + i
-        # Save with a prefix
         plot_and_save_results(
             res['train_losses'], res['val_losses'],
             res['train_accs'], res['val_accs'],
             model_name=f"WORST_{i+1}_{res['name']}"
         )
-
-print("\nDone! Graphs saved.")
 #%% Logisitic Regression Model
 class LogisticRegressionModel(nn.Module):
     def __init__(self, input_size, num_classes):
